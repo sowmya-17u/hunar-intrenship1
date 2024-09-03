@@ -1,0 +1,48 @@
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
+# Load the
+data = pd.read_csv('/content/food_coded1.csv')
+print(data.columns)
+
+# Inspect the first few rows
+print(data.head())
+
+# Get information about the dataset
+print(data.info())
+
+# Get summary statistics
+print(data.describe(include='all'))
+
+# Check for missing values
+print(data.isnull().sum())
+
+data.fillna(value={'column_name': 'default_value'}, inplace=True)
+
+# Check for duplicate rows
+print(data.duplicated().sum())
+
+# Remove duplicate rows
+data.drop_duplicates(inplace=True)
+
+# Convert data types (example)
+data['Gender'] = data['Gender'].astype(str)
+data['calories_chicken'] = data['calories_chicken'].astype('int')
+
+#Standardize numeric data
+numeric_columns = ['calories_scone']  # Replace with the list of columns you want to standardize
+scaler = StandardScaler()
+data[numeric_columns] = scaler.fit_transform(data[numeric_columns])
+print(data[numeric_columns].head())
+
+# Normalize text data
+data['diet_current'] = data['diet_current'].str.lower()
+
+
+#Fill missing values in column  with mean
+data['calories_day'].fillna(data['calories_day'].mean(), inplace=True)
+
+# Fill missing values in column  with mean
+data['calories_chicken'].fillna(data['calories_chicken'].mean(), inplace=True)
+
+# Save the updated DataFrame to a new CSV file
+data.to_csv('/content/food_coded2.csv', index=False)
