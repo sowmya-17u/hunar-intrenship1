@@ -1,0 +1,81 @@
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix, precision_score, recall_score, f1_score
+
+
+ # Load the dataset (replace 'house_data.csv' with your dataset)
+data = pd.read_csv('/content/breast cancer.csv')
+
+# Explore the dataset (optional)
+print(data.head())
+print(data.describe())
+print(data.info())
+# Check for missing values
+print("Missing values count:")
+print(data.isnull().sum())
+# Define the range of values for 'k'
+k_values = [1, 3, 5, 7, 9, 11, 13, 15]
+# Create a KNN classifier
+knn = KNeighborsClassifier()
+# Define the grid search parameters
+param_grid = {'n_neighbors': k_values}
+X = data.drop('diagnosis', axis=1)
+y = data['diagnosis']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+# Scale the features using StandardScaler
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+# Create a KNN classification model with k=5
+knn = KNeighborsClassifier(n_neighbors=5)
+# Train the model on the scaled training data
+knn.fit(X_train_scaled, y_train)
+
+# Make predictions on the scaled training data
+y_train_pred = knn.predict(X_train_scaled)
+# Make predictions on the scaled testing data
+y_test_pred = knn.predict(X_test_scaled)
+# Evaluate the model's performance on the training data
+accuracy_train = accuracy_score(y_train, y_train_pred)
+print("Training Accuracy:", accuracy_train)
+
+# Print the classification report for the training data
+print("Training Classification Report:")
+print(classification_report(y_train, y_train_pred))
+
+# Print the confusion matrix for the training data
+print("Training Confusion Matrix:")
+print(confusion_matrix(y_train, y_train_pred))
+
+# Calculate precision, recall, and F1 score
+accuracy = accuracy_score(y_test, y_test_pred)
+precision = precision_score(y_test, y_test_pred, average='weighted')
+recall = recall_score(y_test, y_test_pred, average='weighted')
+f1 = f1_score(y_test, y_test_pred, average='weighted')
+
+print("Testing Precision:", precision)
+print("Testing Recall:", recall)
+print("Testing F1 Score:", f1)
+#Loop through each value of 'k'
+for k in k_values:
+# Create a KNN classification model with the current value of 'k'
+ knn = KNeighborsClassifier(n_neighbors=k)
+# Print the results for the current value of 'k'
+print(f"k={k}:")
+print(f"  Accuracy: {accuracy:.3f}")
+print(f"  Precision: {precision:.3f}")
+print(f"  Recall: {recall:.3f}")
+print(f"  F1 Score: {f1:.3f}")
+print()
+best_accuracy = accuracy
+# Update the best 'k' and the best scores if the current model performs better
+if accuracy > best_accuracy:
+ best_k = k
+ best_accuracy = accuracy
+best_precision = precision
+best_recall = recall
+best_f1 = f1
