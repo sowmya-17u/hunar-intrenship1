@@ -1,0 +1,14 @@
+import matplotlib.pyplot as plt
+heights = [169.7, 169.1, 166.7, 166.5, 165.6, 166.6, 167.2, 168, 169.4, 170.9, 171, 173.9, 174.9, 176, 176.9, 177.1, 176.8]
+sum_of_heights = sum(heights)
+num_data_points = len(heights)
+mean_height = sum_of_heights / num_data_points
+print("Mean Height:", mean_height)
+import matplotlib.pyplot as plt
+years = [1810, 1820, 1830, 1840, 1850, 1860, 1870, 1880, 1900, 1910, 1920, 1930, 1940, 1950, 1960, 1970, 1980]
+heights = [169.7, 169.1, 166.7, 166.5, 165.6, 166.6, 167.2, 168, 169.4, 170.9, 171, 173.9, 174.9, 176, 176.9, 177.1, 176.8]
+plt.plot(years, heights)
+plt.xlabel("Year")
+plt.ylabel("Height (cm)")
+plt.title("Heights of Males in the UK (1800s-1980)")
+plt.show()
